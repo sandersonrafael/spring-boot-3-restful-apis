@@ -1,0 +1,7 @@
+# Mappers
+
+* Servem para converter o objeto em um objetoVO (ou objetoDTO)
+* Os mais comuns são: MapStruct (MAIS BEM AVALIADO), ModelMapper (MAIS COMUM), Dozer (PAROU DE DAR SUPORTE) e Orika (MAL AVALIADO)
+  -> Dozer doc: https://github.com/DozerMapper/dozer
+* Seguir pasta src/main/java/com/spring3/firstproject/mapper/DozerMapper.java
+  -> para acessar as configurações do DozerMapper
