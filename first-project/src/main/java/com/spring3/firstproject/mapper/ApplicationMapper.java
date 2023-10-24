@@ -3,12 +3,17 @@ package com.spring3.firstproject.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
+// import org.modelmapper.ModelMapper;
+
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 
-public class DozerMapper {
+public class ApplicationMapper {
 
     private static Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+
+    // para alterar para o ModelMapper, basta alterar essa linha e o import em cima
+    // private static ModelMapper mapper = new ModelMapper();
 
     public static <Origin, Destination> Destination parseObject(Origin origin, Class<Destination> destination) {
         return mapper.map(origin, destination);

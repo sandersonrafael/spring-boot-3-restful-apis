@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring3.firstproject.data.vo.v1.PersonVO;
+import com.spring3.firstproject.data.vo.v2.PersonVOV2;
 import com.spring3.firstproject.exceptions.ResourceNotFoundException;
-import com.spring3.firstproject.mapper.DozerMapper;
+import com.spring3.firstproject.mapper.ApplicationMapper;
+import com.spring3.firstproject.mapper.custom.PersonMapper;
 import com.spring3.firstproject.model.Person;
 import com.spring3.firstproject.repositories.PersonRepository;
 
@@ -19,10 +21,13 @@ public class PersonService {
     @Autowired
     PersonRepository repository;
 
+    @Autowired
+    PersonMapper mapperV2;
+
     public List<PersonVO> findAll() {
         logger.info("Finding all persons!");
 
-        return DozerMapper.parseListObjects(repository.findAll(), PersonVO.class);
+        return ApplicationMapper.parseListObjects(repository.findAll(), PersonVO.class);
     }
 
     public PersonVO findById(Long id) {
@@ -36,14 +41,26 @@ public class PersonService {
 
         Person entity = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        return DozerMapper.parseObject(entity, PersonVO.class);
+        return ApplicationMapper.parseObject(entity, PersonVO.class);
     }
 
     public PersonVO create(PersonVO person) {
-        Person entity = DozerMapper.parseObject(person, Person.class);
+        Person entity = ApplicationMapper.parseObject(person, Person.class);
         logger.info("Creating a person!");
 
-        PersonVO vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        PersonVO vo = ApplicationMapper.parseObject(repository.save(entity), PersonVO.class);
+        return vo;
+    }
+
+    // trata-se da V2 da API
+    public PersonVOV2 createV2(PersonVOV2 person) {
+        Person entity = mapperV2.convertVoToEntity(person);
+        logger.info("Creating a person!");
+
+        // Nesse caso, o Dozer não consegue converter, porque o PersonVOV2 tem um campo a mais que o Person -
+        // retornado do repository.save((Person) entity)
+        // para resolver esse problema, será criado um Mapper Customizado
+        PersonVOV2 vo = mapperV2.convertEntityToVo(repository.save(entity));
         return vo;
     }
 
@@ -58,7 +75,7 @@ public class PersonService {
         entity.setAddress(person.getAddress());
         entity.setGender(person.getGender());
 
-        PersonVO vo = DozerMapper.parseObject(repository.save(entity), PersonVO.class);
+        PersonVO vo = ApplicationMapper.parseObject(repository.save(entity), PersonVO.class);
         return vo;
     }
 
