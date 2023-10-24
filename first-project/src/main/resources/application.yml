@@ -8,5 +8,6 @@ spring:
         password: senha123
     jpa:
         hibernate:
-            ddl-auto: update
+            ddl-auto: none # Isso significa que o hibernate só vai ler gravar informações, não modificando a estrutura do banco
+            # o valor default para ddl-auto seria update
         show-sql: false

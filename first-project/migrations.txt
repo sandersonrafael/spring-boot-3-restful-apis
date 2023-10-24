@@ -1,0 +1,27 @@
+# Migrations
+
+
+* Trata-se de uma "atualização" no schema da base de dados
+
+* A biblioteca que será usada para isto nessa unidade é o Flyway (importado direto via pom com starter + versão mysql manualmente)
+
+* Criamos o diretório db / migration, dentro de main / resources
+
+* Necessário exportar o DB como SQL através do próprio SGDB
+
+* Os arquivos de migrations devem ser escritos na seguinte estrutura:
+
+V1__Nome_Da_Migration.sql
+
+Onde V(n) é o versionamento, __ é o separador (necessário)
+Em vez do V, pode ser usado U(n) para Undo
+Além do R(n) para Repeatable migrations
+
+* Configurar->  jpa:
+                    hibernate:
+                        ddl-auto: none
+
+
+* É possível criar migrations com FlyWay pela linha de comando. Consultar em caso de necessidade, na aula 91 - mód 11
+  -> depois de instalar os plugins e dependencys, basta usar o comando: mvn flyway:migrate
+

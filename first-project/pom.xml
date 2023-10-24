@@ -52,6 +52,18 @@
             <artifactId>modelmapper</artifactId>
             <version>${model-mapper.version}</version>
         </dependency>
+
+	    <dependency>
+	        <groupId>org.flywaydb</groupId>
+	        <artifactId>flyway-core</artifactId>
+	    </dependency>
+
+        <!-- Segundo o professor, é necessário adicionar essa também para o flyway funcionar com MySQL -->
+	    <dependency>
+	        <groupId>org.flywaydb</groupId>
+	        <artifactId>flyway-mysql</artifactId>
+	    </dependency>
+
 	</dependencies>
 
 	<build>
