@@ -1,0 +1,6 @@
+# Content Negotiation
+
+* Utilizado para prover a resposta em diferentes formatos, além do JSON, como xml, yml, etc
+  -> Server-driven - Ou proactive content negotiation é a escolha do servidor dos conteúdos de resposta
+    às requisições
+  -> Agent-driven - Ou reactive content negotiation é a escolha do cliente de como deseja receber essa informação

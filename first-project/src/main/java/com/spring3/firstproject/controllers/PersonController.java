@@ -28,20 +28,22 @@ public class PersonController {
     /*
         produces = MediaType.APPLICATION_JSON_VALUE e consumes não são necessários hoje em dia
         mas é recomendado usar para quando for utilizar o swagger para documentar a API
+
+        produces = MediaType.APPLICATION_XML_VALUE -> determina que a aplicação serve XML
     */
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE } )
     public List<PersonVO> findAll() {
         return service.findAll();
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{id}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE } )
     public PersonVO findById(@PathVariable(value = "id") Long id) {
         return service.findById(id);
     }
 
     @PostMapping(
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE
+        consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+        produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     ) public PersonVO create(@RequestBody PersonVO person) {
         return service.create(person);
     }
@@ -56,8 +58,8 @@ public class PersonController {
     // }
 
     @PutMapping(
-        consumes = MediaType.APPLICATION_JSON_VALUE,
-        produces = MediaType.APPLICATION_JSON_VALUE
+        consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
+        produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     ) public PersonVO update(@RequestBody PersonVO person) {
         return service.update(person);
     }
