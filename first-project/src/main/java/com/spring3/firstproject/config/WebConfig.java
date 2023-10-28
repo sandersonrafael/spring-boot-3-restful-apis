@@ -1,17 +1,34 @@
 package com.spring3.firstproject.config;
 
+import java.util.List;
+
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.spring3.firstproject.serialization_converter.YamlJackson2HttpMessageConverter;
+
 @Configuration // Define que o Spring Boot precisa ler essa classe ao iniciar a execução
 public class WebConfig implements WebMvcConfigurer {
+
+    // Necessário adicionar o MediaType para usar o yaml, depois utilizar na declaração de tipos permitidos
+    private static final MediaType MEDIA_TYPE_APPLICATION_YML = MediaType.valueOf("application/x-yaml");
+
+    // necessário implementar esse método chamando o converter criado para que seja gerado o yml
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(new YamlJackson2HttpMessageConverter());
+    }
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         // https://www.baeldung.com/spring-mvc-content-negotiation-json-xml
         // O content negotiation através de extension (url.xml | url.json | url.x-yaml, etc) foi depreciado
+
+
+        /* Via Query Param
 
         // Utilizaremos parâmetro de url, como: http://url:port/path?mediaType=xml
 
@@ -28,6 +45,22 @@ public class WebConfig implements WebMvcConfigurer {
             .defaultContentType(MediaType.APPLICATION_JSON)
             .mediaType("json", MediaType.APPLICATION_JSON)
             .mediaType("xml", MediaType.APPLICATION_XML);
-    }
+        */
 
+        /* Via Header Param
+
+        Configuração com os mesmos métodos, mas favorParameter e ignoreAcceptHeader com valores false
+        Sem o método .parameterName, pois não receberá parâmetro
+
+        No header da requisição, utilizar:
+        Accept: application/xml
+        */
+        configurer.favorParameter(false)
+            .ignoreAcceptHeader(false)
+            .useRegisteredExtensionsOnly(false)
+            .defaultContentType(MediaType.APPLICATION_JSON)
+            .mediaType("json", MediaType.APPLICATION_JSON)
+            .mediaType("xml", MediaType.APPLICATION_XML)
+            .mediaType("x-yaml", MEDIA_TYPE_APPLICATION_YML);
+    }
 }

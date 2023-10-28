@@ -2,12 +2,12 @@ package com.spring3.firstproject.data.vo.v1;
 
 import java.io.Serializable;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+// import com.fasterxml.jackson.annotation.JsonIgnore;
+// import com.fasterxml.jackson.annotation.JsonProperty;
+// import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 // @JsonPropertyOrder({"variavel1", "variavel2", ..., "variaveln"}) -> utilizado para definir a ordem de exibição dos atributos no JSON de resposta da API
-@JsonPropertyOrder({"firstName", "address", "id", "gender", "lastName"})
+// @JsonPropertyOrder({"first_name", "address", "id", "gender", "last_name"}) // pode apresentar erro se for trabalhar com YAML
 public class PersonVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -15,16 +15,16 @@ public class PersonVO implements Serializable {
 
     private Long id;
 
-    @JsonProperty(value = "first_name")
+    // @JsonProperty(value = "first_name") // pode apresentar erro se for trabalhar com YAML
     private String firstName;
 
-    @JsonProperty(value = "last_name")
+    // @JsonProperty(value = "last_name") // pode apresentar erro se for trabalhar com YAML
     private String lastName;
 
     private String address;
 
     // @JsonIgnore -> faz com que a propriedade do objeto não seja exibida na response
-    @JsonIgnore
+    // @JsonIgnore // pode apresentar erro se for trabalhar com YAML
     private String gender;
 
     public PersonVO() {
