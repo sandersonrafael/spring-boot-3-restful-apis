@@ -2,13 +2,29 @@ package com.spring3.firstproject.data.vo.v1;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+// @JsonPropertyOrder({"variavel1", "variavel2", ..., "variaveln"}) -> utilizado para definir a ordem de exibição dos atributos no JSON de resposta da API
+@JsonPropertyOrder({"firstName", "address", "id", "gender", "lastName"})
 public class PersonVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    // @JsonProperty(value = "nome_do_atributo_no_json") -> determina como o atributo será exibido após na response
+
     private Long id;
+
+    @JsonProperty(value = "first_name")
     private String firstName;
+
+    @JsonProperty(value = "last_name")
     private String lastName;
+
     private String address;
+
+    // @JsonIgnore -> faz com que a propriedade do objeto não seja exibida na response
+    @JsonIgnore
     private String gender;
 
     public PersonVO() {
