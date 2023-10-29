@@ -36,9 +36,22 @@
 			<scope>test</scope>
 		</dependency>
 
+        <!-- Mockito, para mockar classes e realizar testes -->
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	    <dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter-data-jpa</artifactId>
+	    </dependency>
+
+        <!-- Importação para implementar o hateoas -->
+	    <dependency>
+	        <groupId>org.springframework.hateoas</groupId>
+	        <artifactId>spring-hateoas</artifactId>
 	    </dependency>
 
         <!-- Utilizado para prover XML como resposta -->
@@ -81,7 +94,6 @@
 	        <groupId>org.flywaydb</groupId>
 	        <artifactId>flyway-mysql</artifactId>
 	    </dependency>
-
 	</dependencies>
 
 	<build>

@@ -4,8 +4,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+// importados para poder utilizar o hateoas
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
 import org.springframework.stereotype.Service;
 
+import com.spring3.firstproject.controllers.PersonController;
 import com.spring3.firstproject.data.vo.v1.PersonVO;
 // import com.spring3.firstproject.data.vo.v2.PersonVOV2;
 import com.spring3.firstproject.exceptions.ResourceNotFoundException;
@@ -27,7 +32,17 @@ public class PersonService {
     public List<PersonVO> findAll() {
         logger.info("Finding all persons!");
 
-        return ApplicationMapper.parseListObjects(repository.findAll(), PersonVO.class);
+        // adicionando o link hateoas
+        List<PersonVO> vos = ApplicationMapper.parseListObjects(repository.findAll(), PersonVO.class);
+        for (PersonVO vo : vos) {
+            vo.add(
+                WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(PersonController.class).findById(vo.getKey())
+                ).withSelfRel()
+            );
+        }
+
+        return vos;
     }
 
     public PersonVO findById(Long id) {
@@ -41,7 +56,15 @@ public class PersonService {
 
         Person entity = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        return ApplicationMapper.parseObject(entity, PersonVO.class);
+        PersonVO vo = ApplicationMapper.parseObject(entity, PersonVO.class);
+
+        // adicionando o link hateoas
+        vo.add(
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(PersonController.class).findById(id)
+            ).withSelfRel()
+        );
+        return vo;
     }
 
     public PersonVO create(PersonVO person) {
@@ -49,6 +72,13 @@ public class PersonService {
         logger.info("Creating a person!");
 
         PersonVO vo = ApplicationMapper.parseObject(repository.save(entity), PersonVO.class);
+
+        // adicionando o link hateoas
+        vo.add(
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(PersonController.class).findById(vo.getKey())
+            ).withSelfRel()
+        );
         return vo;
     }
 
@@ -67,7 +97,7 @@ public class PersonService {
     public PersonVO update(PersonVO person) {
         logger.info("Updating a person!");
 
-        Person entity = repository.findById(person.getId())
+        Person entity = repository.findById(person.getKey())
             .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
         entity.setFirstName(person.getFirstName());
@@ -76,6 +106,14 @@ public class PersonService {
         entity.setGender(person.getGender());
 
         PersonVO vo = ApplicationMapper.parseObject(repository.save(entity), PersonVO.class);
+
+        // adicionando o link hateoas
+
+        vo.add(
+            WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(PersonController.class).findById(vo.getKey())
+            ).withSelfRel()
+        );
         return vo;
     }
 
