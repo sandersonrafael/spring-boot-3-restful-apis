@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring3.firstproject.controllers.PersonController;
 import com.spring3.firstproject.data.vo.v1.PersonVO;
+import com.spring3.firstproject.exceptions.RequiredObjectIsNullException;
 // import com.spring3.firstproject.data.vo.v2.PersonVOV2;
 import com.spring3.firstproject.exceptions.ResourceNotFoundException;
 import com.spring3.firstproject.mapper.ApplicationMapper;
@@ -68,6 +69,8 @@ public class PersonService {
     }
 
     public PersonVO create(PersonVO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
+
         Person entity = ApplicationMapper.parseObject(person, Person.class);
         logger.info("Creating a person!");
 
@@ -95,6 +98,8 @@ public class PersonService {
     // }
 
     public PersonVO update(PersonVO person) {
+        if (person == null) throw new RequiredObjectIsNullException();
+
         logger.info("Updating a person!");
 
         Person entity = repository.findById(person.getKey())
