@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 // @JsonPropertyOrder({"variavel1", "variavel2", ..., "variaveln"}) -> utilizado para definir a ordem de exibição dos atributos no JSON de resposta da API
 @JsonPropertyOrder({"id"}) // pode apresentar erro se for trabalhar com YAML
-public class PersonVO extends RepresentationModel<PersonVO>  implements Serializable {
+public class PersonVO extends RepresentationModel<PersonVO> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // @JsonProperty(value = "nome_do_atributo_no_json") -> determina como o atributo será exibido após na response

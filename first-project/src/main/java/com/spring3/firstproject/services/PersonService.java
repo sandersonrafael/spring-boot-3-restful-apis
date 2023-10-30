@@ -48,12 +48,6 @@ public class PersonService {
 
     public PersonVO findById(Long id) {
         logger.info("Finding one person!");
-        PersonVO person = new PersonVO();
-
-        person.setFirstName("Fulano");
-        person.setLastName("Silva");
-        person.setAddress("Brasília - DF - Brasil");
-        person.setGender("Male");
 
         Person entity = repository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
