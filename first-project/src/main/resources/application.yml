@@ -11,3 +11,9 @@ spring:
             ddl-auto: none # Isso significa que o hibernate só vai ler gravar informações, não modificando a estrutura do banco
             # o valor default para ddl-auto seria update
         show-sql: false
+# Documentação do Swagger -> Somente para o caminho que possuir a String:
+# Tudo que começar com /api/qualquer-coisa/v1/qualquer-caminho
+springdoc:
+    paths-to-match: /api/**/v1/**
+    swagger-ui:
+        use-root-path: true
