@@ -1,0 +1,15 @@
+# Swagger
+
+* Para utilizar o Swagger, é necessário adicionar a dependência disponível na doc:
+  -> https://springdoc.org/
+
+* Necessário criar um arquivo de configuração conforme arquivo OpenApiConfig.java
+  -> Adicionar a annotation @Configuration na classe
+  -> Criar método customOpenAPI que retorna um OpenAPI e adicionar a annotation @Bean
+  -> Configurar as infos e a license
+
+* Para acessar o JSON do Swagger no projeto, utilizamos a url /v3/api-docs
+  -> Ex: http://localhost:8080/v3/api-docs
+
+* Para acessar a aplicação interativa do Swagger, utilizamos a url /swagger-ui/index.html
+  -> Ex: http://localhost:8080/swagger-ui/index.html
