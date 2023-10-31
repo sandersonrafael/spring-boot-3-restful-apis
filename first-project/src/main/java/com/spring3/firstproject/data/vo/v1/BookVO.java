@@ -81,13 +81,11 @@ public class BookVO extends RepresentationModel<BookVO> implements Serializable 
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if (obj == null)
-            return false;
         if (this == obj)
             return true;
         if (!super.equals(obj))
             return false;
-        if (getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass())
             return false;
         BookVO other = (BookVO) obj;
         if (key == null) {

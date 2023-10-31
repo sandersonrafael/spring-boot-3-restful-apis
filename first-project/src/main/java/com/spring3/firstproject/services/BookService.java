@@ -75,9 +75,15 @@ public class BookService {
     public BookVO update(BookVO book) {
         if (book == null) throw new RequiredObjectIsNullException();
 
-        logger.info("Updateing a book!");
+        logger.info("Updating a book!");
 
-        Book entity = ApplicationMapper.parseObject(book, Book.class);
+        Book entity = repository.findById(book.getKey()).orElseThrow(
+            () -> new ResourceNotFoundException("No records found for this ID")
+        );
+        entity.setAuthor(book.getAuthor());
+        entity.setTitle(book.getTitle());
+        entity.setPrice(book.getPrice());
+        entity.setLaunchDate(book.getLaunchDate());
 
         BookVO vo = ApplicationMapper.parseObject(repository.save(entity), BookVO.class);
 

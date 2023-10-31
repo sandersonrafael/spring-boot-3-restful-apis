@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.spring3.firstproject.data.vo.v1.PersonVO;
 import com.spring3.firstproject.mapper.ApplicationMapper;
 import com.spring3.firstproject.model.Person;
+import com.spring3.firstproject.unittests.mapper.mocks.MockPerson;
 
 public class DozerConverterTest {
 

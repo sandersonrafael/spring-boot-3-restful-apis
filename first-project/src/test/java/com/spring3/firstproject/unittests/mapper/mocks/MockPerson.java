@@ -1,4 +1,4 @@
-package com.spring3.firstproject.unittests.mapper;
+package com.spring3.firstproject.unittests.mapper.mocks;
 
 import java.util.ArrayList;
 import java.util.List;

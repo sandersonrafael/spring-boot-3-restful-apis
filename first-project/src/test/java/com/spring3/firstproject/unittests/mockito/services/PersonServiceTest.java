@@ -21,7 +21,7 @@ import com.spring3.firstproject.exceptions.RequiredObjectIsNullException;
 import com.spring3.firstproject.model.Person;
 import com.spring3.firstproject.repositories.PersonRepository;
 import com.spring3.firstproject.services.PersonService;
-import com.spring3.firstproject.unittests.mapper.MockPerson;
+import com.spring3.firstproject.unittests.mapper.mocks.MockPerson;
 
 @TestInstance(Lifecycle.PER_CLASS)
 @ExtendWith(MockitoExtension.class)
