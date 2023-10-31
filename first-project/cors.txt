@@ -1,0 +1,26 @@
+# Cors - Cross Origin Resource Sharing
+
+* Para poder export a API para outros domínios na internet, é necessário configurar o Cors
+* É possível configurar o Cors de duas maneiras na API: Por Controller e Global
+  -> Controller:
+    -> Utilizamos a anotation @CrossOrigin
+    -> Também é possível permitir somente métodos específicos, como findById e create, por ex
+    -> Para definir os hosts aceitos, utilizamos @CrossOrigin(origins = "valor" ou { "valor1", "valor2", ... })
+  -> Global:
+    -> Necessário configurar no arquivo yaml ou outro arquivo de config o cors.originPatterns = origensSeparadasPorVírgula
+    -> Para essa configu funcionar, é necessário criar a configuração, pois não é reconhecida nativamente pelo Spring (embora tenha uma opção para cors lá)
+    -> Será criada no arquivo WebConfig, personalizado
+    -> Setar annotation @Value na propriedade criada no arquivo WebConfig.java para que o application.yaml envie os valores
+      -> Ex:    @Value("${cors.origin-patterns:valorDefaultCasoDeseje}")
+                private String corsOriginPatterns = "";
+    -> Adicionar método @Override
+                        public void addCorsMappings(CorsRegistry registry) {
+                            String[] allowedOrigins = corsOriginPatterns.split(",");
+                            registry.addMapping("/**")
+                                .allowedMethods("GET", "POST", "PUT", "DELETE", etc...)
+                                .allowedOrigins(allowedOrigins)
+                                .allowCredentials(true);
+                        }
+
+
+# Criando testes de integração...

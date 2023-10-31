@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "cors.origin-patterns",
+  "type": "java.lang.String",
+  "description": "A Global config for CORS about allowed origins"
+}]}

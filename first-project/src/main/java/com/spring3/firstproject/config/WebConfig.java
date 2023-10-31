@@ -2,10 +2,12 @@ package com.spring3.firstproject.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.spring3.firstproject.serialization_converter.YamlJackson2HttpMessageConverter;
@@ -15,6 +17,20 @@ public class WebConfig implements WebMvcConfigurer {
 
     // Necessário adicionar o MediaType para usar o yaml, depois utilizar na declaração de tipos permitidos
     private static final MediaType MEDIA_TYPE_APPLICATION_YML = MediaType.valueOf("application/x-yaml");
+
+    // configuração do CORS
+    @Value("${cors.origin-patterns}")
+    private String corsOriginPatterns = "";
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        String[] allowedOrigins = corsOriginPatterns.split(",");
+        registry.addMapping("/**") // rotas onde o cors específico se aplica
+            // .allowedMethods("GET", "POST", "PUT", "DELETE") // métodos permitidos
+            .allowedMethods("*") // para permitir todos, usamos *
+            .allowedOrigins(allowedOrigins) // origins aceitas conforme array de String obtido
+            .allowCredentials(true); // permitir autenticação
+    }
 
     // necessário implementar esse método chamando o converter criado para que seja gerado o yml
     @Override

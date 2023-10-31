@@ -1,5 +1,8 @@
+# Cors Global -> Necessário criar o arquivo de configuração com anotation @Configuration e criar o método
+cors:
+    originPatterns: http://localhost:8080,http://localhost:5173,https://www.erudio.com.br
 server:
-  port: 8080
+    port: 8080
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
