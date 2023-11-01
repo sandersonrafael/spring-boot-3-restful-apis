@@ -1,17 +1,19 @@
 cors:
     originPatterns: http://localhost:8080,http://localhost:5173,https://www.erudio.com.br
+security:
+    jwt:
+        token:
+            secret-key: 53cr37
+            expire-length: 3600000
 server:
-  port: 8888
+    port: 8888
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
         hibernate:
-            ddl-auto: none # Isso significa que o hibernate só vai ler gravar informações, não modificando a estrutura do banco
-            # o valor default para ddl-auto seria update
+            ddl-auto: none
         show-sql: false
-# Documentação do Swagger -> Somente para o caminho que possuir a String:
-# Tudo que começar com /api/qualquer-coisa/v1/qualquer-caminho
 springdoc:
     paths-to-match: /api/**/v1/**
     swagger-ui:

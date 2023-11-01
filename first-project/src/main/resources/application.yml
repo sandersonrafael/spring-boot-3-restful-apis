@@ -1,6 +1,11 @@
 # Cors Global -> Necessário criar o arquivo de configuração com anotation @Configuration e criar o método
 cors:
     originPatterns: http://localhost:8080,http://localhost:5173,https://www.erudio.com.br
+security:
+    jwt:
+        token:
+            secret-key: 53cr37 # a secret para gerar o token
+            expire-length: 3600000 # tempo em ms
 server:
     port: 8080
 spring:
