@@ -11,6 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // criando método customizável para o Repository
     // :userName trata-se do parâmetro de argumento do método
     // aqui estamos lidando com objetos e não com as tabelas, por isso cammelCase
-    @Query("SELECT u FROM User WHERE u.userName = :userName")
+    @Query("SELECT u FROM User u WHERE u.userName = :userName")
     User findByUserName(@Param("userName") String userName);
 }

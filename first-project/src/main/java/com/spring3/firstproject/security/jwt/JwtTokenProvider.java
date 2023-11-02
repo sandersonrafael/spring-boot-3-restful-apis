@@ -52,6 +52,18 @@ public class JwtTokenProvider {
         return new TokenVO(username, true, now, validity, accessToken, refreshToken);
     }
 
+    public TokenVO refreshToken(String refreshToken) {
+        if (refreshToken.contains(" ")) refreshToken = refreshToken.split(" ")[1];
+        JWTVerifier verifier = JWT.require(algorithm).build();
+        DecodedJWT decodedJWT = verifier.verify(refreshToken);
+
+        String username = decodedJWT.getSubject(); // getSubject obtém o usuário (sub) do Jwt
+        // getClaim obtém o valor da chave informada para o payload do jwt / asList(String.class) converte o array em lista de strings
+        List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
+
+        return createAccessToken(username, roles);
+    }
+
     private String getAccessToken(String username, List<String> roles, Date now, Date validity) {
         // obter o caminho da url
         String issuerUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
