@@ -1,7 +1,10 @@
-package com.spring3.firstproject.data.vo.v1.security;
+package com.spring3.firstproject.integrationtests.vo;
 
 import java.io.Serializable;
 
+import jakarta.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class AccountCredentialsVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -9,7 +12,6 @@ public class AccountCredentialsVO implements Serializable {
     private String password;
 
     public AccountCredentialsVO() {
-
     }
 
     public AccountCredentialsVO(String username, String password) {
