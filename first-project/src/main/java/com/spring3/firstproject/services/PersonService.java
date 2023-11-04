@@ -1,7 +1,6 @@
 package com.spring3.firstproject.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;

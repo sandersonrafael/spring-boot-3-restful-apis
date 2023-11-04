@@ -101,12 +101,12 @@ public class PersonVO extends RepresentationModel<PersonVO> implements Serializa
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj)
             return true;
         if (!super.equals(obj))
             return false;
-        if (getClass() != obj.getClass())
+        if (obj == null || getClass() != obj.getClass())
             return false;
         PersonVO other = (PersonVO) obj;
         if (key == null) {
