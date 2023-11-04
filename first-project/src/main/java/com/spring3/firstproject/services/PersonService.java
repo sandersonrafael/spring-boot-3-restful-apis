@@ -1,6 +1,7 @@
 package com.spring3.firstproject.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import com.spring3.firstproject.mapper.ApplicationMapper;
 // import com.spring3.firstproject.mapper.custom.PersonMapper;
 import com.spring3.firstproject.model.Person;
 import com.spring3.firstproject.repositories.PersonRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PersonService {
@@ -113,6 +116,19 @@ public class PersonService {
                 WebMvcLinkBuilder.methodOn(PersonController.class).findById(vo.getKey())
             ).withSelfRel()
         );
+        return vo;
+    }
+
+    @Transactional // utilizada para definir que o controller dessa operação é referente a uma transação personalizada
+    // essa anotation pode ser na classe ou no método
+    public PersonVO disablePerson(Long id) {
+        logger.info("Disabling a person!");
+
+        repository.disablePerson(id);
+        Person entity = repository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+        PersonVO vo = ApplicationMapper.parseObject(entity, PersonVO.class);
+
         return vo;
     }
 
