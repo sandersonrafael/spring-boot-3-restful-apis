@@ -1,10 +1,10 @@
 package com.spring3.firstproject.services;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 // importados para poder utilizar o hateoas
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
@@ -32,20 +32,22 @@ public class PersonService {
     // @Autowired
     // PersonMapper mapperV2;
 
-    public List<PersonVO> findAll() {
+    public Page<PersonVO> findAll(Pageable pageable) {
         logger.info("Finding all persons!");
 
-        // adicionando o link hateoas
-        List<PersonVO> vos = ApplicationMapper.parseListObjects(repository.findAll(), PersonVO.class);
-        for (PersonVO vo : vos) {
+        Page<Person> personPage = repository.findAll(pageable); // Ao adicionar o pageable dentro do findAll, o spring trata com paginação
+
+        Page<PersonVO> personVosPage = personPage.map((Person p) -> { // método da interface Page para fazer um map para outro tipo
+            PersonVO vo = ApplicationMapper.parseObject(p, PersonVO.class);
             vo.add(
                 WebMvcLinkBuilder.linkTo(
                     WebMvcLinkBuilder.methodOn(PersonController.class).findById(vo.getKey())
                 ).withSelfRel()
             );
-        }
+            return vo;
+        });
 
-        return vos;
+        return personVosPage;
     }
 
     public PersonVO findById(Long id) {

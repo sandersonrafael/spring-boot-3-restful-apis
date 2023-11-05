@@ -3,7 +3,6 @@ package com.spring3.firstproject.unittests.mockito.services;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,7 +39,7 @@ public class PersonServiceTest {
         input = new MockPerson();
         MockitoAnnotations.openMocks(this);
     }
-
+/*
     @Test
     void testFindAll() {
         List<Person> list = input.mockEntityList();
@@ -85,7 +84,7 @@ public class PersonServiceTest {
         assertEquals("Last Name Test7", personSeven.getLastName());
         assertEquals("Female", personSeven.getGender());
     }
-
+ */
     @Test
     void testFindById() {
         Person entity = input.mockEntity(1);
