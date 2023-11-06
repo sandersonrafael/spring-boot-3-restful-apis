@@ -5,6 +5,10 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.PagedModel;
 // importados para poder utilizar o hateoas
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
@@ -29,10 +33,14 @@ public class PersonService {
     @Autowired
     PersonRepository repository;
 
+    @Autowired
+    PagedResourcesAssembler<PersonVO> assembler; // para adicionar hateoas à página encontrada por paginação
+
     // @Autowired
     // PersonMapper mapperV2;
 
-    public Page<PersonVO> findAll(Pageable pageable) {
+    // Page<PersonVO> para fazer uma paginação e PagedModel<EntityModel<PersonVO>> para adicionar HATEOAS
+    public PagedModel<EntityModel<PersonVO>> findAll(Pageable pageable) {
         logger.info("Finding all persons!");
 
         Page<Person> personPage = repository.findAll(pageable); // Ao adicionar o pageable dentro do findAll, o spring trata com paginação
@@ -47,7 +55,35 @@ public class PersonService {
             return vo;
         });
 
-        return personVosPage;
+
+        Link link = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(PersonController.class)
+                .findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")
+        ).withSelfRel();
+        return assembler.toModel(personVosPage, link);
+    }
+
+    public PagedModel<EntityModel<PersonVO>> findPersonsByName(String firstName, Pageable pageable) {
+        logger.info("Finding all persons!");
+
+        Page<Person> personPage = repository.findPersonsByName(firstName, pageable);
+
+        Page<PersonVO> personVosPage = personPage.map((Person p) -> {
+            PersonVO vo = ApplicationMapper.parseObject(p, PersonVO.class);
+            vo.add(
+                WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(PersonController.class).findById(vo.getKey())
+                ).withSelfRel()
+            );
+            return vo;
+        });
+
+
+        Link link = WebMvcLinkBuilder.linkTo(
+            WebMvcLinkBuilder.methodOn(PersonController.class)
+                .findAll(pageable.getPageNumber(), pageable.getPageSize(), "asc")
+        ).withSelfRel();
+        return assembler.toModel(personVosPage, link);
     }
 
     public PersonVO findById(Long id) {
