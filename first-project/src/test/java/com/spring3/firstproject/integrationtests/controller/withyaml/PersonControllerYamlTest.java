@@ -3,7 +3,6 @@ package com.spring3.firstproject.integrationtests.controller.withyaml;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -20,6 +19,8 @@ import com.spring3.firstproject.integrationtests.testcontainers.AbstractIntegrat
 import com.spring3.firstproject.integrationtests.vo.AccountCredentialsVO;
 import com.spring3.firstproject.integrationtests.vo.PersonVO;
 import com.spring3.firstproject.integrationtests.vo.TokenVO;
+import com.spring3.firstproject.integrationtests.vo.pagedmodels.PagedModelPerson;
+import com.spring3.firstproject.integrationtests.vo.wrappers.WrapperPersonVO;
 import com.spring3.firstproject.config.TestConfig;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -283,7 +284,7 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
 	public void testFindAll() throws JsonMappingException, JsonProcessingException {
         mockPerson();
 
-        PersonVO[] content = given().spec(specification)
+        PagedModelPerson wrapper = given().spec(specification)
             .config(
                 RestAssuredConfig.config().encoderConfig(
                     EncoderConfig.encoderConfig().encodeContentTypeAs(
@@ -293,15 +294,21 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
             )
             .contentType(TestConfig.CONTENT_TYPE_YML)
             .accept(TestConfig.CONTENT_TYPE_YML)
+            .queryParams(
+                "page", 3,
+                "size", 10,
+                "direction", "asc"
+            )
             .when()
                 .get()
             .then()
                 .statusCode(200)
             .extract()
                 .body()
-                    .as(PersonVO[].class, objectMapper);
+                    .as(PagedModelPerson.class, objectMapper);
                     // .as(new TypeRef<List<PersonVO>>() {});
-        List<PersonVO> contentList = Arrays.asList(content);
+
+        List<PersonVO> contentList = wrapper.getContent();
 
         PersonVO personFoundOne = contentList.get(0);
 
@@ -310,13 +317,13 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(personFoundOne.getLastName());
         assertNotNull(personFoundOne.getAddress());
         assertNotNull(personFoundOne.getGender());
-        assertTrue(personFoundOne.getEnabled());
+        assertFalse(personFoundOne.getEnabled());
 
-        assertEquals(1, personFoundOne.getId());
+        assertEquals(949, personFoundOne.getId());
 
-        assertEquals("Fulaninho", personFoundOne.getFirstName());
-        assertEquals("Silva", personFoundOne.getLastName());
-        assertEquals("Rua Piso Doce, 131 - Navegantes, São Paulo - SP", personFoundOne.getAddress());
+        assertEquals("Alwyn", personFoundOne.getFirstName());
+        assertEquals("Piscot", personFoundOne.getLastName());
+        assertEquals("0529 Sugar Terrace", personFoundOne.getAddress());
         assertEquals("Male", personFoundOne.getGender());
 
         PersonVO personFoundTwo = contentList.get(1);
@@ -326,14 +333,14 @@ public class PersonControllerYamlTest extends AbstractIntegrationTest {
         assertNotNull(personFoundTwo.getLastName());
         assertNotNull(personFoundTwo.getAddress());
         assertNotNull(personFoundTwo.getGender());
-        assertTrue(personFoundTwo.getEnabled());
+        assertFalse(personFoundTwo.getEnabled());
 
-        assertEquals(2, personFoundTwo.getId());
+        assertEquals(511, personFoundTwo.getId());
 
-        assertEquals("Fulano 2", personFoundTwo.getFirstName());
-        assertEquals("Silva", personFoundTwo.getLastName());
-        assertEquals("Rua Piso Salgado, 195 - Trabalhadores, Sorocaba - SP", personFoundTwo.getAddress());
-        assertEquals("Male", personFoundTwo.getGender());
+        assertEquals("Amalita", personFoundTwo.getFirstName());
+        assertEquals("Leah", personFoundTwo.getLastName());
+        assertEquals("0 Kropf Way", personFoundTwo.getAddress());
+        assertEquals("Female", personFoundTwo.getGender());
 	}
 
     @Test

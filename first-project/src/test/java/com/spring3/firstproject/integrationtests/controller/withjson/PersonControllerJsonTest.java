@@ -13,7 +13,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +20,7 @@ import com.spring3.firstproject.integrationtests.testcontainers.AbstractIntegrat
 import com.spring3.firstproject.integrationtests.vo.AccountCredentialsVO;
 import com.spring3.firstproject.integrationtests.vo.PersonVO;
 import com.spring3.firstproject.integrationtests.vo.TokenVO;
+import com.spring3.firstproject.integrationtests.vo.wrappers.WrapperPersonVO;
 import com.spring3.firstproject.config.TestConfig;
 
 import io.restassured.builder.RequestSpecBuilder;
@@ -240,6 +240,11 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
 
         String content = given().spec(specification)
             .contentType(TestConfig.CONTENT_TYPE_JSON)
+            .queryParams(
+                "page", 3,
+                "size", 10,
+                "direction", "asc"
+            )
             .when()
                 .get()
             .then()
@@ -248,7 +253,8 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
                 .body()
                     .asString();
                     // .as(new TypeRef<List<PersonVO>>() {});
-        List<PersonVO> contentList = objectMapper.readValue(content, new TypeReference<List<PersonVO>>() {});
+        WrapperPersonVO wrapper = objectMapper.readValue(content, WrapperPersonVO.class);
+        List<PersonVO> contentList = wrapper.getEmbedded().getPersons();
 
         PersonVO personFoundOne = contentList.get(0);
 
@@ -257,13 +263,13 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(personFoundOne.getLastName());
         assertNotNull(personFoundOne.getAddress());
         assertNotNull(personFoundOne.getGender());
-        assertTrue(personFoundOne.getEnabled());
+        assertFalse(personFoundOne.getEnabled());
 
-        assertEquals(1, personFoundOne.getId());
+        assertEquals(949, personFoundOne.getId());
 
-        assertEquals("Fulaninho", personFoundOne.getFirstName());
-        assertEquals("Silva", personFoundOne.getLastName());
-        assertEquals("Rua Piso Doce, 131 - Navegantes, São Paulo - SP", personFoundOne.getAddress());
+        assertEquals("Alwyn", personFoundOne.getFirstName());
+        assertEquals("Piscot", personFoundOne.getLastName());
+        assertEquals("0529 Sugar Terrace", personFoundOne.getAddress());
         assertEquals("Male", personFoundOne.getGender());
 
         PersonVO personFoundTwo = contentList.get(1);
@@ -273,18 +279,59 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
         assertNotNull(personFoundTwo.getLastName());
         assertNotNull(personFoundTwo.getAddress());
         assertNotNull(personFoundTwo.getGender());
-        assertTrue(personFoundTwo.getEnabled());
+        assertFalse(personFoundTwo.getEnabled());
 
-        assertEquals(2, personFoundTwo.getId());
+        assertEquals(511, personFoundTwo.getId());
 
-        assertEquals("Fulano 2", personFoundTwo.getFirstName());
-        assertEquals("Silva", personFoundTwo.getLastName());
-        assertEquals("Rua Piso Salgado, 195 - Trabalhadores, Sorocaba - SP", personFoundTwo.getAddress());
-        assertEquals("Male", personFoundTwo.getGender());
+        assertEquals("Amalita", personFoundTwo.getFirstName());
+        assertEquals("Leah", personFoundTwo.getLastName());
+        assertEquals("0 Kropf Way", personFoundTwo.getAddress());
+        assertEquals("Female", personFoundTwo.getGender());
 	}
 
     @Test
     @Order(7)
+	public void testFindByName() throws JsonMappingException, JsonProcessingException {
+        mockPerson();
+
+        String content = given().spec(specification)
+            .contentType(TestConfig.CONTENT_TYPE_JSON)
+            .pathParam("firstName", "feo")
+            .queryParams(
+                "page", 0,
+                "size", 6,
+                "direction", "asc"
+            )
+            .when()
+                .get("/findByName/{firstName}")
+            .then()
+                .statusCode(200)
+            .extract()
+                .body()
+                    .asString();
+                    // .as(new TypeRef<List<PersonVO>>() {});
+        WrapperPersonVO wrapper = objectMapper.readValue(content, WrapperPersonVO.class);
+        List<PersonVO> contentList = wrapper.getEmbedded().getPersons();
+
+        PersonVO personFoundTwo = contentList.get(0);
+
+        assertNotNull(personFoundTwo.getId());
+        assertNotNull(personFoundTwo.getFirstName());
+        assertNotNull(personFoundTwo.getLastName());
+        assertNotNull(personFoundTwo.getAddress());
+        assertNotNull(personFoundTwo.getGender());
+        assertFalse(personFoundTwo.getEnabled());
+
+        assertEquals(981, personFoundTwo.getId());
+
+        assertEquals("Feodora", personFoundTwo.getFirstName());
+        assertEquals("Archdeckne", personFoundTwo.getLastName());
+        assertEquals("41 Florence Street", personFoundTwo.getAddress());
+        assertEquals("Female", personFoundTwo.getGender());
+	}
+
+    @Test
+    @Order(8)
 	public void testFindAllWithoutToken() throws JsonMappingException, JsonProcessingException {
         RequestSpecification specificationWithoutToken = new RequestSpecBuilder()
             .setBasePath("/api/person/v1")

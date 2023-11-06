@@ -120,4 +120,10 @@ public class PersonVO implements Serializable {
             return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "PersonVO [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address
+                + ", gender=" + gender + ", enabled=" + enabled + "]";
+    }
 }
