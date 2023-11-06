@@ -21,7 +21,6 @@ import com.spring3.firstproject.integrationtests.vo.AccountCredentialsVO;
 import com.spring3.firstproject.integrationtests.vo.PersonVO;
 import com.spring3.firstproject.integrationtests.vo.TokenVO;
 import com.spring3.firstproject.integrationtests.vo.pagedmodels.PagedModelPerson;
-import com.spring3.firstproject.integrationtests.vo.wrappers.WrapperPersonVO;
 import com.spring3.firstproject.config.TestConfig;
 
 import io.restassured.builder.RequestSpecBuilder;

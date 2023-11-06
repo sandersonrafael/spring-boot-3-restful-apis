@@ -292,8 +292,6 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
     @Test
     @Order(7)
 	public void testFindByName() throws JsonMappingException, JsonProcessingException {
-        mockPerson();
-
         String content = given().spec(specification)
             .contentType(TestConfig.CONTENT_TYPE_JSON)
             .pathParam("firstName", "feo")
@@ -346,6 +344,35 @@ public class PersonControllerJsonTest extends AbstractIntegrationTest {
                 .get()
             .then()
                 .statusCode(403);
+	}
+
+    @Test
+    @Order(9)
+	public void testHateoas() throws JsonMappingException, JsonProcessingException {
+        String content = given().spec(specification)
+            .contentType(TestConfig.CONTENT_TYPE_JSON)
+            .queryParams(
+                "page", 3,
+                "size", 10,
+                "direction", "asc"
+            )
+            .when()
+                .get()
+            .then()
+                .statusCode(200)
+            .extract()
+                .body()
+                    .asString();
+        System.out.println();
+
+        assertTrue(content.contains("http://localhost:8888/api/person/v1/949"));
+        assertTrue(content.contains("page"));
+        assertTrue(content.contains("size"));
+        assertTrue(content.contains("last"));
+        assertTrue(content.contains("next"));
+        assertTrue(content.contains("self"));
+        assertTrue(content.contains("prev"));
+        assertTrue(content.contains("first"));
 	}
 
     private void mockPerson() {
