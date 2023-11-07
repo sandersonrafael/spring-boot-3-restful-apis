@@ -1,6 +1,8 @@
 # Cors Global -> Necessário criar o arquivo de configuração com anotation @Configuration e criar o método
 cors:
     originPatterns: http://localhost:8080,http://localhost:5173,https://www.erudio.com.br
+file:
+    upload-dir: ./upload-dir
 security:
     jwt:
         token:
@@ -11,7 +13,7 @@ server:
 spring:
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.102:3306/rest_with_spring_boot_udemy?useTimezone=true&serverTimezone=UTC
+        url: jdbc:mysql://localhost:3306/rest_with_spring_boot_udemy?useTimezone=true&serverTimezone=UTC
         username: root
         password: senha123
     jpa:
@@ -19,6 +21,14 @@ spring:
             ddl-auto: none # Isso significa que o hibernate só vai ler gravar informações, não modificando a estrutura do banco
             # o valor default para ddl-auto seria update
         show-sql: false
+    servlet: # usado para trabalhar com arquivos
+        multipart:
+            enabled: true # habilita o multipart na aplicação (arquivos enviados em várias partes)
+            file-size-threshold: 2KB # Valor que irá ocupar em memória antes de gravar em disco
+            max-file-size: 1MB # Estabelece o tamanho máximo de um arquivo
+            max-request-size: 2MB
+
+
 # Documentação do Swagger -> Somente para o caminho que possuir a String:
 # Tudo que começar com /api/qualquer-coisa/v1/qualquer-caminho
 springdoc:
