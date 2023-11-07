@@ -1,5 +1,5 @@
 cors:
-    originPatterns: http://localhost:8080,http://localhost:5173,https://www.erudio.com.br
+    originPatterns: http://localhost,http://localhost:80,http://localhost:8080,http://localhost:5173,https://www.erudio.com.br
 file:
     upload-dir: ./upload-dir
 security:
